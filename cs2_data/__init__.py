@@ -1,28 +1,43 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from dash import Dash, html, dash_table, dcc, Input, Output,callback
+import plotly.express as px
+
+app = Dash(__name__)
 
 #* map data analysis
 map_data = pd.read_csv("../src/maps_statistics.csv")
 map_data = map_data.replace(',','', regex=True)
+map_data.loc[pd.to_numeric(map_data["Matches"]) < 8e3, "Map"] = 'Other maps'
+options = list(map_data["Map"])
 
-#* mapas mais jogados
-maps_played = map_data[["Map", "Play Rate"]].copy()
-maps_played = maps_played.replace("%", "", regex=True)
+fig = px.pie(map_data, values="Matches", names="Map", title="Map Play Rate")
 
-plt.figure(figsize=(8,6))
-patches, texts, autotexts = plt.pie(maps_played["Play Rate"], autopct='%1.1f%%', explode=[0.05,0.05,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0])
-plt.legend(map_data["Map"][0:6], bbox_to_anchor=(1.03, 1.0), loc='upper left')
+app.layout = html.Div([
+    html.Div(children='Dataset'),
+    
+    dash_table.DataTable(data=map_data.to_dict('records'), page_size=10),
+    
+    dcc.Graph(figure=fig),
+    
+    dcc.Dropdown(options, value=options[0], id='maps'),
+    
+    dcc.Graph(
+        id = 'win-rate',
+        figure=fig
+    )
+])
 
-for i in range(6, 10):
-    patches[i].set_visible(False)
-    texts[i].set_visible(False)
-    autotexts[i].set_visible(False)
+@app.callback(
+    Output('win-rate', 'figure'),
+    Input('maps', 'value')
+)
+def update_output(value):
+    if value == map_data.iloc[0,0]:
+        val = [map_data.iloc[0,2].replace('%',''), map_data.iloc[0,3].replace('%','')]
+        fig = px.pie(map_data, values=val, names=["T-Win %", "CT-Win %"], title=f"{value} Win Rate")
+    return fig
 
-plt.title("Maps Played %")
-plt.savefig("test.png")
-plt.show()
-
-# *lado que mais ganha em cada mapa  -> gráfico de pizza
-
-#* número de partidas jogadas
+if __name__ == "__main__":
+    app.run(debug=True)
