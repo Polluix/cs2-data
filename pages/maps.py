@@ -2,19 +2,47 @@ import pandas as pd
 from dash import Dash, html, dash_table, dcc, Input, Output,callback
 import dash_bootstrap_components as dbc
 import plotly.express as px
-
-#* map data dashboard
-df = pd.read_csv("../src/maps_statistics.csv")
-df = df.replace(',','', regex=True)
-df.loc[pd.to_numeric(df["Matches"]) < 8e3, "Map"] = 'Other maps'
-options = list(df["Map"])
+import numpy as np
 
 external_stylesheets = [dbc.themes.BOOTSTRAP]
 
 mapApp = Dash(__name__,external_stylesheets=external_stylesheets)
 
-fig = px.pie(df, values="Matches", names="Map", title="Map Play Rate", color_discrete_sequence=px.colors.sequential.Blues)
+#* map data dashboard
+df = pd.read_csv("../src/maps_statistics.csv")
+df = df.replace(',','', regex=True)
+
+df_other = df.copy()
+
+df_other.loc[pd.to_numeric(df_other["Matches"]) < 8e3, "Map"] = 'Other maps'
+options = list(df_other["Map"].unique())
+
+# print(options)
+# print(df_other.to_string())
+
+values = []
+for row in df.iloc[8:10,4]:
+    values.append(int(row))
+
+soma = sum(values) #total number of matches
+
+#removes 2 last rows of df_other
+df_other.drop(df.tail(2).index, inplace=True)
+
+#replaces data
+other_dict = {
+    'Map':'Other Maps',
+    'Play Rate':'0',
+    'T-Win %':'0',
+    'CT-Win %':'0',
+    'Matches':f'{soma}'
+}
+
+df_other = df_other._append(other_dict, ignore_index=True)
+
+fig = px.pie(df_other, values="Matches", names="Map", title="Map Play Rate", color_discrete_sequence=px.colors.sequential.Blues)
 fig.update_layout(paper_bgcolor='#092635', font_color="white")
+options = list(df["Map"])
 
 row = dbc.Row(
             [
@@ -92,11 +120,11 @@ def update_output(value):
     elif value == df.iloc[8,0]:
         val = [df.iloc[8,2].replace('%',''), df.iloc[8,3].replace('%','')]
         fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"],
-                    title=f"{value} Win Rate", color=px.colors.sequential.Blues)
+                    title=f"{value} Win Rate", color_discrete_sequence=px.colors.sequential.Blues)
     elif value == df.iloc[9,0]:
         val = [df.iloc[9,2].replace('%',''), df.iloc[9,3].replace('%','')]
         fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"],
-                    title=f"{value} Win Rate", color=px.colors.sequential.Blues)
+                    title=f"{value} Win Rate", color_discrete_sequence=px.colors.sequential.Blues)
     
     fig.update_layout(paper_bgcolor='#092635', font_color="white")
 
