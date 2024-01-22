@@ -59,34 +59,44 @@ mapApp.layout = dbc.Container(
 def update_output(value):
     if value == df.iloc[0,0]:
         val = [df.iloc[0,2].replace('%',''), df.iloc[0,3].replace('%','')]
-        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"], title=f"{value} Win Rate", color_discrete_sequence=px.colors.sequential.Blues)
+        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"], 
+                    title=f"{value} Win Rate", color_discrete_sequence=px.colors.sequential.Blues)
     elif value == df.iloc[1,0]:
         val = [df.iloc[1,2].replace('%',''), df.iloc[1,3].replace('%','')]
-        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"], title=f"{value} Win Rate", color_discrete_sequence=px.colors.sequential.Blues)
+        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"],
+                    title=f"{value} Win Rate", color_discrete_sequence=px.colors.sequential.Blues)
     elif value == df.iloc[2,0]:
         val = [df.iloc[2,2].replace('%',''), df.iloc[3,3].replace('%','')]
-        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"], title=f"{value} Win Rate", color_discrete_sequence=px.colors.sequential.Blues)
+        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"],
+                    title=f"{value} Win Rate", color_discrete_sequence=px.colors.sequential.Blues)
     elif value == df.iloc[3,0]:
         val = [df.iloc[3,2].replace('%',''), df.iloc[3,3].replace('%','')]
-        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"], title=f"{value} Win Rate", color_discrete_sequence=px.colors.sequential.Blues)
+        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"],
+                    title=f"{value} Win Rate", color_discrete_sequence=px.colors.sequential.Blues)
     elif value == df.iloc[4,0]:
         val = [df.iloc[4,2].replace('%',''), df.iloc[4,3].replace('%','')]
-        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"], title=f"{value} Win Rate", color_discrete_sequence=px.colors.sequential.Blues)
+        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"],
+                    title=f"{value} Win Rate", color_discrete_sequence=px.colors.sequential.Blues)
     elif value == df.iloc[5,0]:
         val = [df.iloc[5,2].replace('%',''), df.iloc[5,3].replace('%','')]
-        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"], title=f"{value} Win Rate", color_discrete_sequence=px.colors.sequential.Blues)
+        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"],
+                    title=f"{value} Win Rate", color_discrete_sequence=px.colors.sequential.Blues)
     elif value == df.iloc[6,0]:
         val = [df.iloc[6,2].replace('%',''), df.iloc[6,3].replace('%','')]
-        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"], title=f"{value} Win Rate", color_discrete_sequence=px.colors.sequential.Blues)
+        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"],
+                    title=f"{value} Win Rate", color_discrete_sequence=px.colors.sequential.Blues)
     elif value == df.iloc[7,0]:
         val = [df.iloc[7,2].replace('%',''), df.iloc[7,3].replace('%','')]
-        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"], title=f"{value} Win Rate", color_discrete_sequence=px.colors.sequential.Blues)
+        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"],
+                    title=f"{value} Win Rate", color_discrete_sequence=px.colors.sequential.Blues)
     elif value == df.iloc[8,0]:
         val = [df.iloc[8,2].replace('%',''), df.iloc[8,3].replace('%','')]
-        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"], title=f"{value} Win Rate", color=px.colors.sequential.Blues)
+        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"],
+                    title=f"{value} Win Rate", color=px.colors.sequential.Blues)
     elif value == df.iloc[9,0]:
         val = [df.iloc[9,2].replace('%',''), df.iloc[9,3].replace('%','')]
-        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"], title=f"{value} Win Rate", color=px.colors.sequential.Blues)
+        fig = px.pie(df, values=val, names=["T-Win %", "CT-Win %"],
+                    title=f"{value} Win Rate", color=px.colors.sequential.Blues)
     
     fig.update_layout(paper_bgcolor='#092635', font_color="white")
 
