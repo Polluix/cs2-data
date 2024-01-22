@@ -17,9 +17,6 @@ df_other = df.copy()
 df_other.loc[pd.to_numeric(df_other["Matches"]) < 8e3, "Map"] = 'Other maps'
 options = list(df_other["Map"].unique())
 
-# print(options)
-# print(df_other.to_string())
-
 values = []
 for row in df.iloc[8:10,4]:
     values.append(int(row))
