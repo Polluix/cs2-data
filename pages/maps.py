@@ -40,7 +40,8 @@ other_dict = {
 
 df_other = df_other._append(other_dict, ignore_index=True)
 
-fig = px.pie(df_other, values="Matches", names="Map", title="Map Play Rate", color_discrete_sequence=px.colors.sequential.Blues)
+fig = px.pie(df_other, values="Matches", names="Map", title="Map Play Rate",
+             color_discrete_sequence=px.colors.sequential.Blues)
 fig.update_layout(paper_bgcolor='#092635', font_color="white")
 options = list(df["Map"])
 
