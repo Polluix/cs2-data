@@ -68,7 +68,11 @@ row = dbc.Row(
                 )
             ],
             align="center",
-            style={'backgroundColor':'#092635'}
+            style={
+                'backgroundColor':'#092635',
+                'height':'100vh',
+                'width':'100vw'
+            }
         )
 
 mapApp.layout = dbc.Container(
