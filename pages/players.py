@@ -13,7 +13,6 @@ playerApp = Dash(__name__,external_stylesheets=external_stylesheets)
 #* concentração por regiao
 #* skill rating 
 #* win rate
-#* win/loss por jogador
 
 player_df = pd.read_csv('../src/top_100_players.csv')
 player_df = player_df.replace(',','', regex=True)
@@ -94,15 +93,6 @@ row1 = dbc.Row(
         dbc.Col(
             dcc.Graph(figure=region_count),
         ),
-
-        dbc.Col(
-            dcc.Graph(figure=skill)
-        )
-    ]
-)
-
-row2 = dbc.Row(
-    [
         dbc.Col(
             [
                 dbc.Row(
@@ -123,11 +113,14 @@ row2 = dbc.Row(
                 )
             ]
            
-        ),
-        dbc.Col(
-            dcc.Graph(figure=region_count)
         )
     ]
+)
+
+row2 = dbc.Row(
+    dbc.Col(
+        dcc.Graph(figure=skill)
+    )
 )
 
 playerApp.layout = dbc.Container(
