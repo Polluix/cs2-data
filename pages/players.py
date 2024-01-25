@@ -3,9 +3,6 @@ from dash import Dash, html, dash_table, dcc, Input, Output,callback
 import dash_bootstrap_components as dbc
 import plotly.express as px
 
-
-df = pd.read_csv('../src/top_100_players.csv')
-
 external_stylesheets = [dbc.themes.BOOTSTRAP]
 
 playerApp = Dash(__name__,external_stylesheets=external_stylesheets)
