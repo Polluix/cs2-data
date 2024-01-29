@@ -5,6 +5,9 @@ import plotly.express as px
 
 weapon_df = pd.read_csv('../src/weapons_statistics.csv')
 
+weapon_df = weapon_df.replace('%', '', regex=True)
+weapon_df = weapon_df.replace(',', '', regex=True)
+
 external_stylesheets = [dbc.themes.BOOTSTRAP]
 
 weaponApp = Dash(__name__,external_stylesheets=external_stylesheets)
@@ -48,10 +51,87 @@ kpr.update_traces(
     textposition='outside'
 )
 
+hit_frame = pd.DataFrame({
+    'count':[
+        weapon_df.loc[0, 'HS %'],
+        weapon_df.loc[0, 'Chest %'],
+        weapon_df.loc[0, 'Leg %']
+    ]},
+    index =[
+        'HS %', 
+        'Chest %', 
+        'Leg %', 
+    ]
+)
+
+hit_drop = dcc.Dropdown(
+    options=options,
+    clearable=False,
+    value=options[0],
+    id='hit-drop'
+)
+
+hit = px.pie(hit_frame, values='count', names=[
+        'HS %', 
+        'Chest %', 
+        'Leg %', 
+    ], color_discrete_sequence= [
+        px.colors.sequential.Blues[0],
+        px.colors.sequential.Blues[4],
+        px.colors.sequential.Blues[8]
+    ],
+    title = 'Hit %')
+
+hit.update_layout(
+    {
+        'plot_bgcolor':'rgba(0,0,0,0)',
+        'paper_bgcolor':'rgba(0,0,0,0)',
+        'font_color':'white',
+    },
+    title={
+        'x':0.5,
+        'y':0.9,
+        'xanchor':'center',
+        'yanchor':'top'
+    },
+)
+
+tk_df = pd.DataFrame(
+    {
+        'count':weapon_df['Total Kills'].to_list()
+    }, index=weapon_df['Weapon'].to_list()
+)
+
+tk = px.pie(tk_df, values='count', title='Total Kills',
+            names=weapon_df['Weapon'].to_list())
+
+tk.update_layout(
+    {
+        'plot_bgcolor':'rgba(0,0,0,0)',
+        'paper_bgcolor':'rgba(0,0,0,0)',
+        'font_color':'white',
+    },
+    title={
+        'x':0.5,
+        'y':0.9,
+        'xanchor':'center',
+        'yanchor':'top'
+    },
+)
+
 row1 = dbc.Row(
     [
-        dbc.Col(dcc.Graph()),
-        dbc.Col(dcc.Graph())
+        dbc.Col(
+            [
+                hit_drop,
+                dcc.Graph(figure=hit, id='hit-fig')
+            ]
+        ),
+        dbc.Col(
+            [
+                dcc.Graph(figure=tk, id='tk-fig')
+            ]
+        )
     ]
 )
 
@@ -71,6 +151,57 @@ weaponApp.layout = dbc.Container(
         'width':'100vw'
     }
 )
+
+@weaponApp.callback(
+    Output('hit-fig', 'figure'),
+    Input('hit-drop', 'value')
+)
+def update_output(value):
+    index =weapon_df.isin([value]).any(axis=1).idxmax()
+    hit_frame = pd.DataFrame({
+        'count':[
+            weapon_df.loc[index, 'HS %'],
+            weapon_df.loc[index, 'Chest %'],
+            weapon_df.loc[index, 'Leg %']
+        ]},
+        index =[
+            'HS %', 
+            'Chest %', 
+            'Leg %', 
+        ]
+    )
+
+    hit = px.pie(hit_frame, values='count', names=[
+        'HS %', 
+        'Chest %', 
+        'Leg %', 
+    ], color_discrete_sequence= [
+        px.colors.sequential.Blues[0],
+        px.colors.sequential.Blues[4],
+        px.colors.sequential.Blues[8]
+    ],
+    title = 'Hit %')
+
+    hit.update_layout(
+        {
+            'plot_bgcolor':'rgba(0,0,0,0)',
+            'paper_bgcolor':'rgba(0,0,0,0)',
+            'font_color':'white',
+        },
+        title={
+            'x':0.5,
+            'y':0.9,
+            'xanchor':'center',
+            'yanchor':'top'
+        },
+    )
+    hit.update_traces(
+        text = [value for value in hit_frame['count'] + '%'],
+        textinfo='text'
+    )
+
+    return hit
+
 
 if __name__=='__main__':
     weaponApp.run_server(debug=True)
