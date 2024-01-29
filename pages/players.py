@@ -1,17 +1,17 @@
 import pandas as pd
-from dash import Dash, html, dash_table, dcc, Input, Output,callback
+from dash import dcc, Input, Output,callback, register_page
 import dash_bootstrap_components as dbc
 import plotly.express as px
 
 external_stylesheets = [dbc.themes.BOOTSTRAP]
 
-playerApp = Dash(__name__,external_stylesheets=external_stylesheets)
+register_page(__name__, name='players', external_stylesheets=external_stylesheets)
 
 #* concentração por regiao
 #* skill rating 
 #* win rate
 
-player_df = pd.read_csv('../src/top_100_players.csv')
+player_df = pd.read_csv('./src/top_100_players.csv')
 player_df = player_df.replace(',','', regex=True)
 
 regions = player_df['Region'].unique()
@@ -120,20 +120,23 @@ row2 = dbc.Row(
     )
 )
 
-playerApp.layout = dbc.Container(
-    children=[
-        row1,
-        row2,
-    ],
-    fluid=True,
-    style={
-        'backgroundColor':'#092635',
-        'height':'150vh',
-        'width':'100vw'
-    }
-)
+def layout():
+    layout = dbc.Container(
+        children=[
+            row1,
+            row2,
+        ],
+        fluid=True,
+        style={
+            'backgroundColor':'#092635',
+            'height':'150vh',
+            'width':'100vw'
+        }
+    )
 
-@playerApp.callback(
+    return layout
+
+@callback(
     Output('wl-graph','figure'),
     Input('drop-players', 'value')   
 )
@@ -169,8 +172,3 @@ def update_output(value):
     wl.update_traces(textposition='outside')
 
     return wl
-
-
-
-if __name__=='__main__':
-    playerApp.run_server(debug=True)

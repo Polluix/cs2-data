@@ -1,16 +1,16 @@
 import pandas as pd
-from dash import Dash, html, dash_table, dcc, Input, Output,callback
+from dash import dcc, Input, Output,callback, register_page
 import dash_bootstrap_components as dbc
 import plotly.express as px
 
-weapon_df = pd.read_csv('../src/weapons_statistics.csv')
+weapon_df = pd.read_csv('./src/weapons_statistics.csv')
 
 weapon_df = weapon_df.replace('%', '', regex=True)
 weapon_df = weapon_df.replace(',', '', regex=True)
 
 external_stylesheets = [dbc.themes.BOOTSTRAP]
 
-weaponApp = Dash(__name__,external_stylesheets=external_stylesheets)
+register_page(__name__, name='weapons', external_stylesheets = external_stylesheets)
 
 #* pizza com lugar de acerto
 #* pizza total kills
@@ -139,20 +139,23 @@ row2 = dbc.Row(
     dcc.Graph(figure=kpr)
 )
 
-weaponApp.layout = dbc.Container(
-    children=[
-        row1,
-        row2
-    ],
-    fluid=True,
-    style={
-        'backgroundColor':'#092635',
-        'height':'150vh',
-        'width':'100vw'
-    }
-)
+def layout():
+    layout = dbc.Container(
+        children=[
+            row1,
+            row2
+        ],
+        fluid=True,
+        style={
+            'backgroundColor':'#092635',
+            'height':'150vh',
+            'width':'100vw'
+        }
+    )
 
-@weaponApp.callback(
+    return layout
+
+@callback(
     Output('hit-fig', 'figure'),
     Input('hit-drop', 'value')
 )
@@ -201,7 +204,3 @@ def update_output(value):
     )
 
     return hit
-
-
-if __name__=='__main__':
-    weaponApp.run_server(debug=True)

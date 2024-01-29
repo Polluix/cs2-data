@@ -1,15 +1,14 @@
 import pandas as pd
-from dash import Dash, html, dash_table, dcc, Input, Output,callback
+from dash import dcc, Input, Output,callback, register_page
 import dash_bootstrap_components as dbc
 import plotly.express as px
-import numpy as np
 
 external_stylesheets = [dbc.themes.BOOTSTRAP]
 
-mapApp = Dash(__name__,external_stylesheets=external_stylesheets)
+register_page(__name__, name='maps', external_stylesheets=external_stylesheets)
 
 #* map data dashboard
-df = pd.read_csv("../src/maps_statistics.csv")
+df = pd.read_csv("./src/maps_statistics.csv")
 df = df.replace(',','', regex=True)
 
 df_other = df.copy()
@@ -70,19 +69,21 @@ row = dbc.Row(
             align="center",
             style={
                 'backgroundColor':'#092635',
-                'height':'100vh',
+                'height':'85vh',
                 'width':'100vw'
             }
         )
 
-mapApp.layout = dbc.Container(
-    row,
-    fluid=True,
-    style={'backgroundColor':'#092635'}
-)
+def layout():
+    layout = dbc.Container(
+        row,
+        fluid=True,
+        style={'backgroundColor':'#092635'}
+    )
+    return layout
 
 
-@mapApp.callback(
+@callback(
     Output('win-rate', 'figure'),
     Input('maps', 'value')
 )
@@ -131,6 +132,3 @@ def update_output(value):
     fig.update_layout(paper_bgcolor='#092635', font_color="white")
 
     return fig
-
-if __name__ == "__main__":
-    mapApp.run_server(debug=True)
