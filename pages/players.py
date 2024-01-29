@@ -139,7 +139,6 @@ playerApp.layout = dbc.Container(
 )
 def update_output(value):
     index = player_df.index[player_df['Name']==value].values
-    print(player_df.loc[index, 'Wins'])
     p_df = pd.DataFrame({
         'Name': value,
         'result':['Ties', 'Losses', 'Wins'],
@@ -149,7 +148,6 @@ def update_output(value):
             str(player_df.loc[index, 'Wins'].values[0]),
         ]
     })
-    # print(p_df)
     wl = px.bar(p_df, x='result', y='count', color='result',
             color_discrete_sequence=px.colors.sequential.Blues,
             text_auto=True)
