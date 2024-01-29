@@ -32,7 +32,7 @@ region_count.update_layout(
 )
 
 
-skill = px.scatter(player_df, x='Rank', y='CS Rating')
+skill = px.scatter(player_df, x='Rank', y='CS Rating', hover_name='Name')
 
 skill.update_yaxes(autorange='reversed')
 
