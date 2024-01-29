@@ -5,16 +5,21 @@ external_stylesheets = [dbc.themes.BOOTSTRAP]
 
 app = Dash(__name__,external_stylesheets=external_stylesheets, use_pages=True)
 
-navbar = dbc.NavbarSimple(
-    children=[
-        dbc.NavItem(dbc.NavLink("Maps", href="/maps")),
-        dbc.NavItem(dbc.NavLink("Players", href="/players")),
-        dbc.NavItem(dbc.NavLink("Weapons", href="/weapons"))
-    ],
-    brand="Counter Strike 2 Analysis",
-    color="dark",
-    dark=True,
-    className="mb-2",
+navbar = dbc.Row(
+        dbc.NavbarSimple(
+        children=[
+            dbc.NavItem(dbc.NavLink("Maps", href="/maps")),
+            dbc.NavItem(dbc.NavLink("Players", href="/players")),
+            dbc.NavItem(dbc.NavLink("Weapons", href="/weapons"))
+        ],
+        brand="Counter Strike 2 Analysis",
+        color="dark",
+        dark=True,
+        className="mb-2",
+    ),
+    style = {
+        'width':'100vw',
+    }
 )
 
 container = dbc.Container(id='page-container', fluid=True, className='mb-4')
